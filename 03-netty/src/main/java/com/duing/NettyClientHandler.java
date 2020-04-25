@@ -11,7 +11,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
-        System.out.println("client channelActive done");
+        System.out.println("Client channelActive done");
         ctx.writeAndFlush(Unpooled.copiedBuffer("hello world  Im  client", CharsetUtil.UTF_8));
 
 

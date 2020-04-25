@@ -25,7 +25,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("channelActive done");
         // 写入数据时调用writeAndFlush，代表写入并刷新，只有刷新后才生效
-        ctx.writeAndFlush("性感潮汐在线喷水！");
+        ctx.writeAndFlush("Welcome to Netty Server!!!");
         super.channelActive(ctx);
     }
 
@@ -40,17 +40,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 对应NIO中的ByteBuffer
         ByteBuf buf = (ByteBuf) msg;
-        System.out.println(ctx.channel().remoteAddress());
-        System.out.println("性感黑鸟，在线喝水！" + buf.toString(CharsetUtil.UTF_8));
+        System.out.println("客户端的地址" + ctx.channel().remoteAddress());
+        System.out.println("Msg from client: " + buf.toString(CharsetUtil.UTF_8));
 
-        super.channelRead(ctx, msg);
+        // super.channelRead(ctx, msg);
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         // 写入数据还是使用Bytebuf处理，其中的一个分类Unpooled
-        ctx.writeAndFlush(Unpooled.copiedBuffer("Hello world, I am handler", CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("Msg from server", CharsetUtil.UTF_8));
 
-        super.channelReadComplete(ctx);
+        // super.channelReadComplete(ctx);
     }
 }
