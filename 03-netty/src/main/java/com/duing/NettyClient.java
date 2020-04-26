@@ -23,7 +23,7 @@ public class NettyClient {
                         }
                     });
             System.out.println("客户端初始化完成");
-            ChannelFuture channelFuture = bootstrap.connect("localhost", 8888).sync();
+            ChannelFuture channelFuture = bootstrap.connect("192.168.1.100", 8888).sync();
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
 

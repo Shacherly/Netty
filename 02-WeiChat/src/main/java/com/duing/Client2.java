@@ -12,12 +12,12 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class Client1 {
+public class Client2 {
     private SocketChannel clientChannel;
     // 多路复用器   管理通道和事件之间的注册关系
     private Selector selector;
 
-    public Client1() {
+    public Client2() {
         try {
             selector = Selector.open();
             clientChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 6666));
@@ -72,7 +72,7 @@ public class Client1 {
     }
 
     public static void main(String[] args) {
-        Client1 client1 = new Client1();
+        Client2 client1 = new Client2();
         // 创建Client对象
         // 循环从服务端读取的数据  设置时间间隔   比如2秒
         new Thread(() -> {

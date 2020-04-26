@@ -53,8 +53,8 @@ public class ChatServer {
                         clientChannel.register(selector, SelectionKey.OP_READ);
 
                         // 此时代表客户端和服务端进行连接了
-                        System.out.println("打开微信，开始裸聊……");
-                        System.out.println(clientChannel.socket().getRemoteSocketAddress() + "澳门赌场上线了！！！");
+                        System.out.println("澳门在线裸聊业务上线了！");
+                        System.out.println("澳门赌场用户【" + clientChannel.socket().getRemoteSocketAddress() + "】上线了！！！");
 
                     }
                     if (key.isReadable()) {
@@ -72,6 +72,8 @@ public class ChatServer {
 
     private void readDate(SelectionKey key) {
         SocketChannel fromClient = null;
+
+
         try {
             fromClient = (SocketChannel) key.channel();
             // 一定要是使用ByteBuffer
@@ -80,9 +82,10 @@ public class ChatServer {
             int readLength = fromClient.read(buffer);
             if (readLength > 0) {
                 String msg = new String(buffer.array());
-                System.out.println(fromClient.socket().getRemoteSocketAddress()
+                System.out.println("澳门赌场用户"+fromClient.socket().getRemoteSocketAddress()
                         + "发送消息：" + msg);
                 // 广播值其他客户端，不包括此客户端本身
+                msg += "测试一下？？？";
                 send2Other(msg, fromClient);
             }
         } catch (Exception e) {
@@ -112,8 +115,6 @@ public class ChatServer {
 
     }
 
-
-    
 
     public static void main(String[] args) {
         ChatServer server = new ChatServer();
