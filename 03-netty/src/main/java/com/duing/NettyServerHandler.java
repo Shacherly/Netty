@@ -49,6 +49,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         // 写入数据还是使用Bytebuf处理，其中的一个分类Unpooled
+        // Unpooled是Netty的缓冲区
         ctx.writeAndFlush(Unpooled.copiedBuffer("Msg from server", CharsetUtil.UTF_8));
 
         // super.channelReadComplete(ctx);
