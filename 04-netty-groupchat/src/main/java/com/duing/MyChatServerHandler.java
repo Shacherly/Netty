@@ -21,6 +21,7 @@ public class MyChatServerHandler extends SimpleChannelInboundHandler {
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 能接受客户端的消息  再广播给其他客户端
         Channel selfChannel = ctx.channel();
+        // channelGroup.stream().filter()
         Iterator<Channel> iterator = channelGroup.iterator();
         for (; ; ) {
             if (!iterator.hasNext()) break;
