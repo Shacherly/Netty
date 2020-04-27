@@ -30,7 +30,7 @@ public class MyChatServerHandler extends SimpleChannelInboundHandler {
                     continue;
                 }
                 channel.writeAndFlush("[客户端用户 - " + selfChannel.remoteAddress() +
-                        " ]发送消息： " + msg + "\n");
+                        " ]说： " + msg + "\n");
                 continue;
             }
             String answer;
@@ -70,7 +70,7 @@ public class MyChatServerHandler extends SimpleChannelInboundHandler {
         ctx.write("Welcome to " + InetAddress.getLocalHost().getHostName() + "聊天室!\r\n");
         ctx.write("It is " + new Date() + " now. \r\n");
         ctx.flush();
-        System.out.println(channel.remoteAddress() + "上线");
+        System.out.println("用户IP：" + channel.remoteAddress() + "上线");
 
     }
 
