@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class MyChatServerHandler extends SimpleChannelInboundHandler {
     // 当多个通道传入Handler  netty提供了channel组的管理方法
     // 区分通道和管道，管道是做业务逻辑的，通道是管理用的
-    private static ChannelGroup channelGroup = new DefaultChannelGroup(
+    private static final ChannelGroup channelGroup = new DefaultChannelGroup(
             GlobalEventExecutor.INSTANCE
     );
 
