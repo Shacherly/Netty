@@ -8,6 +8,8 @@ import io.netty.channel.internal.ChannelUtils;
 import io.netty.util.CharsetUtil;
 
 import java.nio.ByteBuffer;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 /**
  * 自定义的  Handler 需要继承特定的适配器
