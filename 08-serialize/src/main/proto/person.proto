@@ -9,4 +9,5 @@ option java_outer_classname="PersonModel";
 message Person {
     int32 id = 1;
     string name = 2;
+
 }
