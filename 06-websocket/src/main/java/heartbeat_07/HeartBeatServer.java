@@ -48,10 +48,10 @@ public class HeartBeatServer {
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new HeartBeatInitializer());
 
-            ChannelFuture channelFuture = serverBootstrap.bind(port).sync();
+            ChannelFuture channelFuture = serverBootstrap.bind("192.168.37.132", port).sync();
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

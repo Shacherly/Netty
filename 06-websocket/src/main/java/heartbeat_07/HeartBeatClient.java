@@ -38,7 +38,7 @@ public class HeartBeatClient {
                     .channel(NioSocketChannel.class)
                     .handler(new HeartBeatInitializer());
 
-            Channel channel = bootstrap.connect("127.0.0.1", port).sync().channel();
+            Channel channel = bootstrap.connect("192.168.37.134", port).sync().channel();
 
             // 要发送的数据
             String msg = "I am alive";
