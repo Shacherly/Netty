@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 public class ServerHandler extends Thread {
     private Socket socket;
+
     public ServerHandler(Socket socket) {
         this.socket = socket;
     }
@@ -18,8 +19,10 @@ public class ServerHandler extends Thread {
         System.out.println(Thread.currentThread().getId() + "---" + Thread.currentThread().getName());
         byte[] msgBytes = new byte[]{};
         InputStream is = null;
+        OutputStream os = null;
         try {
             is = socket.getInputStream();
+            os = socket.getOutputStream();
             byte[] bytes = new byte[256];
             int readLenght = bytes.length;
             for (; ; ) {
@@ -32,18 +35,21 @@ public class ServerHandler extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(msgBytes.length);
+        System.out.println("接收数组长度：" + msgBytes.length);
         System.out.println(new String(msgBytes, StandardCharsets.UTF_8));
         // return msgBytes;
-        response(msgBytes);
+        // response(msgBytes);
+
         try {
+            os.write(msgBytes);
+            os.flush();
+            os.close();
             is.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
 
     private void response(byte[] src) {
@@ -65,9 +71,6 @@ public class ServerHandler extends Thread {
             }
         }*/
     }
-
-
-
 
 
     private static byte[] concatByteArr(byte[] var1, byte[] var2) {

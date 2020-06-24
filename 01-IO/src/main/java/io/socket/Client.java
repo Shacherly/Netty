@@ -10,25 +10,25 @@ import java.util.concurrent.TimeUnit;
 
 public class Client {
     public static void main(String[] args) throws IOException, InterruptedException {
-        Socket socket = new Socket("localhost", 9999);
+        Socket client = new Socket("localhost", 9091);
 
         // for (; ; ) {
 
 
-        OutputStream fos = socket.getOutputStream();
-
-        fos.write(Const.MSG.getBytes());
+        OutputStream os = client.getOutputStream();
+        InputStream is = client.getInputStream();
+        os.write(Const.MSG.getBytes());
         //
-        // fos.flush();
+        os.flush();
         // TimeUnit.SECONDS.sleep(100000);
         // }
-        // fos.close();
+        // os.close();
 
         // Thread.sleep(2000);
 
-        // fos.close();
-        InputStream is = socket.getInputStream();
-        // socket = new Socket("localhost", 9999);
+        // os.close();
+
+        // client = new Socket("localhost", 9999);
 
         byte[] msgBytes = new byte[]{};
         byte[] bytes = new byte[256];
@@ -42,8 +42,8 @@ public class Client {
         }
         System.out.println(new String(msgBytes, StandardCharsets.UTF_8));
         is.close();
-        fos.close();
-        socket.close();
+        os.close();
+        client.close();
     }
 
     private static byte[] concatByteArr(byte[] var1, byte[] var2) {
