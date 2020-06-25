@@ -20,6 +20,7 @@ public class ChatServer {
             selector = Selector.open();
             channel.socket().bind(new InetSocketAddress(6666));
             channel.configureBlocking(false);
+            // 注册通道的可接收事件
             channel.register(selector, SelectionKey.OP_ACCEPT);
         } catch (Exception e) {
             e.printStackTrace();
