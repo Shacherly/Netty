@@ -8,12 +8,12 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ServerEnhancer {
+public class ServerBootstrap {
     public static void main(String[] args) throws IOException {
         ServerSocketChannel serverChannel = ServerSocketChannel.open();
-        SocketAddress address = new InetSocketAddress("192.168.37.162", 8888);
+        SocketAddress address = new InetSocketAddress("localhost", 8888);
         serverChannel.socket().bind(address);
-
+        System.out.println("server started...");
 
         ExecutorService service = new ThreadPoolExecutor(
                 1,
@@ -32,7 +32,7 @@ public class ServerEnhancer {
 
         for (; ; ) {
             SocketChannel socketChannel = serverChannel.accept();
-            HandleEnhancer handler = new HandleEnhancer(socketChannel);
+            BootstrapHandle handler = new BootstrapHandle(socketChannel);
             service.execute(handler);
             // handler.start();
         }

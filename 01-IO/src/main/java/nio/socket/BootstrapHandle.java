@@ -1,17 +1,15 @@
 package nio.socket;
 
-import io.socket.Server1;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class HandleEnhancer extends Thread {
+public class BootstrapHandle extends Thread {
     private SocketChannel socketChannel;
 
-    public HandleEnhancer(SocketChannel socketChannel) {
+    public BootstrapHandle(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
     }
 
@@ -31,16 +29,25 @@ public class HandleEnhancer extends Thread {
         byte[] transfer;
         byte[] result = new byte[0];
         int length;
+        int count = 0;
         for (; ; ) {
             length = socketChannel.read(readBUffer);
+            // 读完成就要flip一下
             readBUffer.flip();
+            // remaining和hasRemaining在flip之后凋用才有值，否则都是0
+            System.out.println("remaining" + readBUffer.remaining());
+            System.out.println("hasRemaining" + readBUffer.hasRemaining());
+            // 读取的字节数组暂存
             transfer = readBUffer.array();
+            // 如果读取的小于容量那肯定是最后一次
             if (length < capacity) transfer = Arrays.copyOf(transfer, length);
+            // 无论如何，有没有的到达流的结尾，都要把每一次读取到的结果放入结果数组
             result = concatByteArr(result, transfer);
+            System.out.println("============" + ++count);
             if (length < capacity) break;
         }
 
-        System.out.println(new String(result, StandardCharsets.UTF_8));
+        System.out.println("Server received: \n"+new String(result, StandardCharsets.UTF_8) + "\r\n");
         response();
     }
 
@@ -51,8 +58,6 @@ public class HandleEnhancer extends Thread {
         writeBuffer.flip();
         // 处理完buffer传入通道中
         socketChannel.write(writeBuffer);
-
-
         socketChannel.close();
     }
 

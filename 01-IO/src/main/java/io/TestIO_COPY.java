@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.io.*;
 import java.lang.reflect.Field;
 
-public class TestIO {
+public class TestIO_COPY {
     @Test
     public void test() throws Exception {
         File file = new File("io.txt");

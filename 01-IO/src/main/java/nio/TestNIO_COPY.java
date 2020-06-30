@@ -11,7 +11,7 @@ import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class TestNIO {
+public class TestNIO_COPY {
 
     @Test
     public void test() throws IOException {
@@ -42,6 +42,10 @@ public class TestNIO {
 
     }
 
+    /**
+     * 测试 capacity  limit  position 三个概念以及相关方法
+     * @throws IOException
+     */
     @Test
     public void test2() throws IOException {
         CharBuffer buffer = CharBuffer.allocate(8);

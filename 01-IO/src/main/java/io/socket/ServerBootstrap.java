@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.concurrent.*;
 
-public class Server {
+public class ServerBootstrap {
     private static Socket socket;
 
     public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {

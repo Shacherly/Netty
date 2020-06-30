@@ -73,7 +73,7 @@ public class ServerHandler extends Thread {
     }
 
 
-    private static byte[] concatByteArr(byte[] var1, byte[] var2) {
+    public static byte[] concatByteArr(byte[] var1, byte[] var2) {
         if (var1 == null) var1 = new byte[]{};
         if (var2 == null) var2 = new byte[]{};
 
