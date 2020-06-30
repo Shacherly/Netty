@@ -61,7 +61,7 @@ public class TestNIO_COPY {
         System.out.println("position：" + buffer.position());
 
         buffer.flip();
-        System.out.println("执行翻转position置0");
+        System.out.println("执行flip翻转position置0，并使limit = capacity");
         System.out.println("capacity：" + buffer.capacity());
         System.out.println("limit：   " + buffer.limit());
         System.out.println("position：" + buffer.position());
@@ -71,7 +71,7 @@ public class TestNIO_COPY {
         System.out.println(buffer.position());
 
         buffer.clear();
-        System.out.println("执行clear，清空position索引，但是数据还在");
+        System.out.println("执行clear，清空position索引，limit = capacity但是数据还在");
         System.out.println(buffer.position());
         System.out.println("索引0" + buffer.get(0));
         System.out.println("索引1" + buffer.get(1));
