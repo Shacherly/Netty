@@ -25,7 +25,7 @@ public class SelectorModel {
         serverSocketChannel.socket().bind(address);
 
         serverSocketChannel.configureBlocking(false);
-        // 打开一个选择器
+        /** 通道管理器，多用户共用 */
         Selector selector = Selector.open();
         // 把通道注册到选择器中,声明选择器监听的事件
         // 将通道选择器和该通道绑定，并为该通道注册 SelectionKey.OP_ACCEPT 事件，注册该事件后
