@@ -8,7 +8,7 @@ import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
 
-public class ChatServer {
+public class ChatServer_JdkNio {
 
     // 服务端通道
     private ServerSocketChannel channel;
@@ -16,7 +16,7 @@ public class ChatServer {
     private Selector selector;
 
     // 构造器  初始化
-    public ChatServer() {
+    public ChatServer_JdkNio() {
         try {
             // 打开一个服务端通道
             channel = ServerSocketChannel.open();
@@ -153,7 +153,7 @@ public class ChatServer {
 
 
     public static void main(String[] args) {
-        ChatServer server = new ChatServer();
+        ChatServer_JdkNio server = new ChatServer_JdkNio();
         server.listen();
     }
 

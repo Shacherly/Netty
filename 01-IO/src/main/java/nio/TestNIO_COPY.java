@@ -52,6 +52,8 @@ public class TestNIO_COPY {
         System.out.println("capacity：" + buffer.capacity());
         System.out.println("limit：   " + buffer.limit());
         System.out.println("position：" + buffer.position());
+        System.out.println("remaining:" + buffer.remaining());
+        System.out.println("hasRem:   " + buffer.hasRemaining());
 
         buffer.put('a');
         buffer.put('b');
@@ -59,22 +61,33 @@ public class TestNIO_COPY {
         System.out.println("capacity：" + buffer.capacity());
         System.out.println("limit：   " + buffer.limit());
         System.out.println("position：" + buffer.position());
+        System.out.println("remaining:" + buffer.remaining());
+        System.out.println("hasRem:   " + buffer.hasRemaining());
 
         buffer.flip();
         System.out.println("执行flip翻转position置0，并使limit = capacity");
         System.out.println("capacity：" + buffer.capacity());
         System.out.println("limit：   " + buffer.limit());
         System.out.println("position：" + buffer.position());
+        System.out.println("remaining:" + buffer.remaining());
+        System.out.println("hasRem:   " + buffer.hasRemaining());
+        buffer.put('c');
 
         System.out.println(buffer.get());
         System.out.println("执行get，position向前移动");
         System.out.println(buffer.position());
+        System.out.println("remaining:" + buffer.remaining());
+        System.out.println("hasRem:   " + buffer.hasRemaining());
 
         buffer.clear();
+        System.out.println("remaining:" + buffer.remaining());
+        System.out.println("hasRem:   " + buffer.hasRemaining());
         System.out.println("执行clear，清空position索引，limit = capacity但是数据还在");
         System.out.println(buffer.position());
         System.out.println("索引0" + buffer.get(0));
         System.out.println("索引1" + buffer.get(1));
+        System.out.println("remaining:" + buffer.remaining());
+        System.out.println("hasRem:   " + buffer.hasRemaining());
         // System.out.println(buffer.get());
         System.out.println(buffer.position());
     }

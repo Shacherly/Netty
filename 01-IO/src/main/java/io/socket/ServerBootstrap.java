@@ -10,53 +10,34 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.concurrent.*;
 
+/**
+ * 多线程实现的   BIO，但是实际上是：来一个客户端就开一个线程，并且线程和用户一直对应直接用户退出，显然资源利用不合理
+ */
 public class ServerBootstrap {
     private static Socket socket;
+    private static final int THREAD_COUNTS = Runtime.getRuntime().availableProcessors();
 
-    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
-        // byte[] result = new byte[0];
-        // result = startUp();
-
-        // FutureTask<byte[]> taskServer = new FutureTask<>(Server::startUp);
-        // new Thread(taskServer).start();
-        // byte[] bytes = taskServer.get();
-        // System.out.println("Main:::::" + bytes.length);
-
+    public static void main(String[] args) throws IOException {
         startUp();
-        // System.out.println("Main:::::\n" + bytes.length);
     }
 
-    public static void startUp() throws IOException, ExecutionException, InterruptedException {
+    public static void startUp() throws IOException{
         // 使用线程池
         // 可缓冲的线程池，如果当前线程超过需要使用的线程，会进行回收
         // 如果没有可用的可以扩展，做到自动伸缩，容量是无限大的。
         ExecutorService service = new ThreadPoolExecutor(
+                THREAD_COUNTS,
+                THREAD_COUNTS,
                 32,
-                64,
-                64,
                 TimeUnit.SECONDS,
-                new LinkedBlockingDeque<>(32),
+                new LinkedBlockingDeque<>(THREAD_COUNTS),
                 r -> new Thread(r, "Tcp-Server")
         );
 
         ServerSocket server = new ServerSocket(9999);
-
-        // 轮询来接收连接
-        // for (; ; ) {
-            // 这是我所等待的结果，阻塞
-            // final保证安全
-            socket = server.accept();
-            // FutureTask<byte[]> taskServer = new FutureTask<>(() -> handler(socket));
-            // service.execute(Server::handler);
-            // byte[] result = taskServer.get();
-            // System.out.println("result:::\n" + new String(result, StandardCharsets.UTF_8));
-            // service.shutdown();
-            // return result;
-            // service.execute(() -> response(socket, result));
-            ServerHandler serverHandler = new ServerHandler(socket);
-            serverHandler.start();
-        // }
-
+        socket = server.accept();
+        ServerHandler serverHandler = new ServerHandler(socket);
+        serverHandler.start();
     }
 
     private static void handler() {
@@ -83,7 +64,6 @@ public class ServerBootstrap {
             }
         }*/
     }
-
 
 
 }

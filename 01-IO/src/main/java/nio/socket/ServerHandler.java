@@ -6,10 +6,10 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class BootstrapHandle extends Thread {
+public class ServerHandler  extends Thread {
     private SocketChannel socketChannel;
 
-    public BootstrapHandle(SocketChannel socketChannel) {
+    public ServerHandler(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
     }
 
@@ -24,7 +24,7 @@ public class BootstrapHandle extends Thread {
     }
 
     private void process() throws IOException {
-        ByteBuffer readBUffer = ByteBuffer.allocate(256);
+        ByteBuffer readBUffer = ByteBuffer.allocate(2);
         int capacity = readBUffer.capacity();
         byte[] transfer;
         byte[] result = new byte[0];

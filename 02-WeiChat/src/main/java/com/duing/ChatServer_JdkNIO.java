@@ -7,14 +7,14 @@ import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
 
-public class ChatServer {
+public class ChatServer_JdkNIO {
     // 服务端通道
     private ServerSocketChannel channel;
     // 多路复用器
     private Selector selector;
 
 
-    public ChatServer() {
+    public ChatServer_JdkNIO() {
         try {
             channel = ServerSocketChannel.open();
             selector = Selector.open();
@@ -118,7 +118,7 @@ public class ChatServer {
 
 
     public static void main(String[] args) {
-        ChatServer server = new ChatServer();
+        ChatServer_JdkNIO server = new ChatServer_JdkNIO();
         server.listen();
     }
 }

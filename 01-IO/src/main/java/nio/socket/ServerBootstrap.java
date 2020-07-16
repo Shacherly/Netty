@@ -32,7 +32,7 @@ public class ServerBootstrap {
 
         for (; ; ) {
             SocketChannel socketChannel = serverChannel.accept();
-            BootstrapHandle handler = new BootstrapHandle(socketChannel);
+            ServerHandler handler = new ServerHandler(socketChannel);
             service.execute(handler);
             // handler.start();
         }
