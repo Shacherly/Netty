@@ -91,7 +91,7 @@ public class JdkNio {
 
         } else if (key.isWritable()) {
             SocketChannel socketChannel = (SocketChannel) key.channel();
-            ByteBuffer writeBuffer = ByteBuffer.allocate(128);
+            ByteBuffer writeBuffer = ByteBuffer.allocate(256);
             // 放一个欢迎消息
             writeBuffer.put("welcome to JDK_NIO server, it is a new world!!!是的\r\n".getBytes("GBK"));
             writeBuffer.flip();
