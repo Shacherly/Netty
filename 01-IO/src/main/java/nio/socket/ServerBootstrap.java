@@ -30,6 +30,9 @@ public class ServerBootstrap {
                 }
         );
 
+        /**
+         * 这里仍未用到 Selector，采用的是无限轮询客户端是否 数据包发送过来，创建Handler交给线程池去处理
+         */
         for (; ; ) {
             SocketChannel socketChannel = serverChannel.accept();
             ServerHandler handler = new ServerHandler(socketChannel);

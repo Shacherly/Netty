@@ -20,13 +20,13 @@ import java.util.Set;
  *
  * 单线程的  基于 Reactor的多路复用模型
  */
-public class JdkNio {
+public class JdkNioSelector {
     private Selector selector;
 
     public static void main(String[] args) throws IOException {
-        JdkNio jdkNio = new JdkNio();
-        jdkNio.init(8888);
-        jdkNio.listen();
+        JdkNioSelector jdkNioSelector = new JdkNioSelector();
+        jdkNioSelector.init(8888);
+        jdkNioSelector.listen();
     }
 
     public void init(int port) throws IOException {
@@ -41,7 +41,7 @@ public class JdkNio {
         selector = Selector.open();
         // 把通道注册到选择器中,声明选择器监听的事件
         // 将通道选择器和该通道绑定，并为该通道注册 SelectionKey.OP_ACCEPT 事件，注册该事件后
-        // 当该事件到达时，selector.select()会返回，如果该事件没有到达，则 selector.select() 会一直阻塞
+        // 当该事件到达时，selector.select()会返回，如果该事件没有到达，则 selector.select() 会一直阻塞，但也可以设置非阻塞的方法
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
         System.out.println("server starting...");
 
@@ -54,7 +54,7 @@ public class JdkNio {
         // 不断的获取select的返回值
         // 采取轮询的方式监听 selector 上是否有需要处理的事件，有则做相应的处理
         for (; ; ) {
-            // 返回“需要执行操作的通道”的个数，置空大于0就是有
+            // 返回“需要执行操作的通道”的个数，置空大于0就是有  return  The number of keys
             int readys = selector.select();
             // nio 作为非阻塞式，上面这一步，我们是可以设置为非阻塞的，代码如下
             // selector.select(1000); // 无论是否有读写事件，selector 每隔 1s 被唤醒
@@ -79,7 +79,7 @@ public class JdkNio {
         // 处理客户端连接事件
         if (key.isAcceptable()) {
             System.out.println("there was new client connected...");
-            // 获得和客户端连接的通道
+            // 获得和客户端连接的通道，和上面定义的通道是同一个对象
             ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
             // System.out.println("external serverSocketChannel" + serverSocketChannel);
             // System.out.println("internal serverSocketChannel1" + serverSocketChannel1);

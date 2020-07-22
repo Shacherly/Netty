@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.concurrent.*;
 
 /**
- * 多线程实现的   BIO，但是实际上是：来一个客户端就开一个线程，并且线程和用户一直对应直接用户退出，显然资源利用不合理
+ * 多线程实现的 BIO，但是实际上是：来一个客户端就开一个线程，并且线程和用户一直对应直接用户退出，显然资源利用不合理
  */
 public class ServerBootstrap {
     private static Socket socket;
