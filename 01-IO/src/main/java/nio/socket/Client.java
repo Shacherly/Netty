@@ -38,6 +38,7 @@ public class Client {
 
         // 读从服务端传输的数据
         ByteBuffer readBuffer = ByteBuffer.allocate(128);
+        socketChannel.configureBlocking(false);// 也可以设置阻塞
         socketChannel.read(readBuffer);
 
         // 读完成
