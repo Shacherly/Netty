@@ -1,6 +1,8 @@
 package nio;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -23,7 +25,13 @@ import java.util.Set;
 public class JdkNioSelector {
     private Selector selector;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
+        Thread thread = Thread.currentThread();
+        Class<? extends Thread> aClass = thread.getClass();
+        Field name = aClass.getDeclaredField("name");
+        name.setAccessible(true);
+        name.set(thread, "666666666666666");
+
         JdkNioSelector jdkNioSelector = new JdkNioSelector();
         jdkNioSelector.init(8888);
         jdkNioSelector.listen();
@@ -54,7 +62,7 @@ public class JdkNioSelector {
         // 不断的获取select的返回值
         // 采取轮询的方式监听 selector 上是否有需要处理的事件，有则做相应的处理
         for (; ; ) {
-            // 返回“需要执行操作的通道”的个数，置空大于0就是有  return  The number of keys
+            // 返回“需要执行操作的通道”的个数，大于0就是有  return  The number of keys
             int readys = selector.select();
             // nio 作为非阻塞式，上面这一步，我们是可以设置为非阻塞的，代码如下
             // selector.select(1000); // 无论是否有读写事件，selector 每隔 1s 被唤醒
@@ -75,7 +83,7 @@ public class JdkNioSelector {
         }
     }
 
-    private void handler(SelectionKey key) throws IOException {
+    private void handler(SelectionKey key) {
         // 处理客户端连接事件
         if (key.isAcceptable()) {
             System.out.println("there was new client connected...");
@@ -85,17 +93,31 @@ public class JdkNioSelector {
             // System.out.println("internal serverSocketChannel1" + serverSocketChannel1);
             // System.out.println("deep equals?" + (serverSocketChannel == serverSocketChannel1));// true
             // 完成下面操作，意味着完成 tcp 三次握手，tcp 物理链路正式建立
-            SocketChannel socketChannel = serverSocketChannel.accept();
-            socketChannel.configureBlocking(false);
-            socketChannel.register(selector, SelectionKey.OP_WRITE);
+            SocketChannel socketChannel = null;
+            try {
+                socketChannel = serverSocketChannel.accept();
+                socketChannel.configureBlocking(false);
+                socketChannel.register(selector, SelectionKey.OP_WRITE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
         } else if (key.isWritable()) {
             SocketChannel socketChannel = (SocketChannel) key.channel();
             ByteBuffer writeBuffer = ByteBuffer.allocate(256);
             // 放一个欢迎消息
-            writeBuffer.put("welcome to JDK_NIO server, it is a new world!!!是的\r\n".getBytes("GBK"));
+            try {
+                writeBuffer.put("welcome to JDK_NIO server, it is a new world!!!是的\r\n".getBytes("GBK"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             writeBuffer.flip();
-            socketChannel.write(writeBuffer);
+            try {
+                socketChannel.write(writeBuffer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             // 写完之后要读
             key.interestOps(SelectionKey.OP_READ);
 
@@ -105,26 +127,36 @@ public class JdkNioSelector {
             SocketChannel socketChannel = (SocketChannel) key.channel();
             ByteBuffer readBuffer = ByteBuffer.allocate(1024);
             readBuffer.clear();
-            int len = socketChannel.read(readBuffer);
-            readBuffer.flip();
+            int len = 0;
 
-            // StringBuffer stringBuffer = new StringBuffer();
-            // while (readBuffer.hasRemaining()) {
-            //     stringBuffer.append((char) readBuffer.get());
-            // }
-            if (len > 0) {
-                System.out.println("received client msg: ");
-                System.out.println(new String(readBuffer.array(), StandardCharsets.UTF_8));
+            try {
+                len = socketChannel.read(readBuffer);
 
-                // 回写数据
-                ByteBuffer writeBackBuffer = ByteBuffer.wrap("server received data-->\r\n".getBytes("GBK"));
-                // 将消息回传给客户端
-                socketChannel.write(writeBackBuffer);
-            } else {
+                readBuffer.flip();
+
+                // StringBuffer stringBuffer = new StringBuffer();
+                // while (readBuffer.hasRemaining()) {
+                //     stringBuffer.append((char) readBuffer.get());
+                // }
+                if (len > 0) {
+                    System.out.println("received client msg: ");
+                    System.out.println(new String(readBuffer.array(), StandardCharsets.UTF_8));
+
+                    // 回写数据
+                    ByteBuffer writeBackBuffer = ByteBuffer.wrap("server received data-->\r\n".getBytes("GBK"));
+                    // 将消息回传给客户端
+                    socketChannel.write(writeBackBuffer);
+                } else {
+                    System.out.println("客户端关闭...");
+                    // SelectionKey 对象会失效，这意味着 Selector 再也不会监控与它相关的事件
+                    key.cancel();
+                }
+            } catch (IOException e) {
                 System.out.println("客户端关闭...");
                 // SelectionKey 对象会失效，这意味着 Selector 再也不会监控与它相关的事件
                 key.cancel();
             }
+
         }
     }
 
