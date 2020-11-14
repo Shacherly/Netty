@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * 不得不说，JDK NIO的API设计的够难用的，坑还巨多....这也是为什么大家都不直接使用nio的原因吧，一般会用mina或者netty啥的
+ */
 public class Client {
     public static void main(String[] args) throws Exception {
 
