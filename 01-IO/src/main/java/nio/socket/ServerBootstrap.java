@@ -12,7 +12,8 @@ public class ServerBootstrap {
     public static void main(String[] args) throws IOException {
         ServerSocketChannel serverChannel = ServerSocketChannel.open();
         SocketAddress address = new InetSocketAddress("localhost", 8888);
-        serverChannel.socket().bind(address);
+        serverChannel/*.socket()*/.bind(address);
+        serverChannel.configureBlocking(false); // non-blocking
         System.out.println("server started...");
 
         ExecutorService service = new ThreadPoolExecutor(
@@ -34,8 +35,10 @@ public class ServerBootstrap {
          * 这里仍未用到 Selector，采用的是无限轮询客户端是否 数据包发送过来，创建Handler交给线程池去处理
          */
         for (; ; ) {
-            SocketChannel socketChannel = serverChannel.accept();
-            ServerHandler handler = new ServerHandler(socketChannel);
+            SocketChannel client = serverChannel.accept();// 不会阻塞
+            client.configureBlocking(false);
+            int port = client.socket().getPort();
+            ServerHandler handler = new ServerHandler(client);
             service.execute(handler);
             // handler.start();
         }
