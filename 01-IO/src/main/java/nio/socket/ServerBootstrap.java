@@ -5,14 +5,14 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ServerBootstrap {
     public static void main(String[] args) throws IOException {
         ServerSocketChannel serverChannel = ServerSocketChannel.open();
-        SocketAddress address = new InetSocketAddress("localhost", 8888);
-        serverChannel/*.socket()*/.bind(address);
+        serverChannel/*.socket()*/.bind(new InetSocketAddress("localhost", 8888));
         serverChannel.configureBlocking(false); // non-blocking
         System.out.println("server started...");
 
@@ -35,11 +35,19 @@ public class ServerBootstrap {
          * 这里仍未用到 Selector，采用的是无限轮询客户端是否 数据包发送过来，创建Handler交给线程池去处理
          */
         for (; ; ) {
-            SocketChannel client = serverChannel.accept();// 不会阻塞
-            client.configureBlocking(false);
-            int port = client.socket().getPort();
-            ServerHandler handler = new ServerHandler(client);
-            service.execute(handler);
+            // 不会阻塞
+            SocketChannel client = serverChannel.accept();
+            Optional.ofNullable(client).ifPresentOrElse(x -> {
+                try {
+                    x.configureBlocking(false);
+                    int port = x.socket().getPort();
+                    ServerHandler handler = new ServerHandler(x);
+                    service.execute(handler);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }, () -> System.out.println("null....."));
+            ;
             // handler.start();
         }
     }
