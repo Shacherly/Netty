@@ -54,6 +54,7 @@ public class TestNIO_COPY {
         System.out.println("position：" + buffer.position());
         System.out.println("remaining:" + buffer.remaining());
         System.out.println("hasRem:   " + buffer.hasRemaining());
+        System.out.println("buffer:   " + buffer);
 
         buffer.put('a');
         buffer.put('b');
@@ -63,6 +64,7 @@ public class TestNIO_COPY {
         System.out.println("position：" + buffer.position());
         System.out.println("remaining:" + buffer.remaining());
         System.out.println("hasRem:   " + buffer.hasRemaining());
+        System.out.println("buffer:   " + buffer);
 
         buffer.flip();
         System.out.println("执行flip翻转position置0，并使limit = capacity");
@@ -72,12 +74,15 @@ public class TestNIO_COPY {
         System.out.println("remaining:" + buffer.remaining());
         System.out.println("hasRem:   " + buffer.hasRemaining());
         buffer.put('c');
+        System.out.println("buffer:   " + buffer);
 
         System.out.println(buffer.get());
-        System.out.println("执行get，position向前移动");
+        System.out.println("执行get，position向后移动");
+        buffer.compact();
         System.out.println(buffer.position());
         System.out.println("remaining:" + buffer.remaining());
         System.out.println("hasRem:   " + buffer.hasRemaining());
+        System.out.println("buffer:   " + buffer);
 
         buffer.clear();
         System.out.println("remaining:" + buffer.remaining());
@@ -90,6 +95,7 @@ public class TestNIO_COPY {
         System.out.println("hasRem:   " + buffer.hasRemaining());
         // System.out.println(buffer.get());
         System.out.println(buffer.position());
+        System.out.println("buffer:   " + buffer);
     }
 
     @Test

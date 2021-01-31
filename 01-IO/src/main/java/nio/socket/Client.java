@@ -22,6 +22,7 @@ public class Client {
 
         // 创建一个客户端管道  open是打开通道的意思
         SocketChannel socketChannel = SocketChannel.open();
+        // socketChannel.bind()
 
         // 连接到服务器
         SocketAddress address = new InetSocketAddress("127.0.0.1", 8888);
